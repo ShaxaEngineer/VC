@@ -18,7 +18,6 @@ export class CreateEmployerDto {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(255, { message: 'Image filename must be at most 255 characters' })
   employer_image: string;
 }
 
