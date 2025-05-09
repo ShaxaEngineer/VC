@@ -19,10 +19,27 @@ export class VacanciesService {
       }
    }
 
-   async findAll(): Promise<any> {
+   async findAll(page, limit): Promise<any> {
       try {
-         const response = await this.vacancyModel.find().exec();
-         return { message: 'success', statusCode: 200, data: response };
+         const skip = (page - 1) * limit;
+
+         const [data, total] = await Promise.all([
+            this.vacancyModel.find().skip(skip).limit(limit).exec(),
+            this.vacancyModel.countDocuments(),
+         ]);
+
+         return {
+            message: 'success',
+            statusCode: 200,
+            data,
+            meta: {
+               total,
+               page,
+               limit,
+               totalPages: Math.ceil(total / limit),
+            },
+         };
+
       } catch (error) {
          throw new InternalServerErrorException('Failed to fetch vacancies');
       }

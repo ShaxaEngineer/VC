@@ -86,14 +86,33 @@ export class VacancyResponseDto {
    _id: string;
 }
 
+class MetaDto {
+   @ApiProperty({ example: 22, description: 'Total number of items' })
+   total: number;
+
+   @ApiProperty({ example: 1, description: 'Current page number' })
+   page: number;
+
+   @ApiProperty({ example: 10, description: 'Number of items per page' })
+   limit: number;
+
+   @ApiProperty({ example: 3, description: 'Total number of pages' })
+   totalPages: number;
+}
 
 export class GetAllVacanciesResponseDto {
-   @ApiProperty({ example: 'success' })
+   @ApiProperty({ example: 'success', description: 'Response message' })
    message: string;
 
-   @ApiProperty({ example: 200 })
+   @ApiProperty({ example: 200, description: 'HTTP status code' })
    statusCode: number;
 
-   @ApiProperty({ type: [VacancyResponseDto] })
+   @ApiProperty({
+      type: [VacancyResponseDto],
+      description: 'List of vacancy items',
+   })
    data: VacancyResponseDto[];
+
+   @ApiProperty({ type: MetaDto, description: 'Pagination metadata' })
+   meta: MetaDto;
 }

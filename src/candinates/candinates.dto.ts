@@ -3,7 +3,7 @@
 import { IsString, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class CreateCandidateDto {
+export class CreateCandinateDto {
    @ApiProperty({
       example: 'Alice Smith',
       description: 'Full name of the candidate',
@@ -12,51 +12,51 @@ export class CreateCandidateDto {
    @IsString()
    @IsNotEmpty()
    @MaxLength(100)
-   candidate_name: string;
+   candinate_name: string;
 
    @ApiProperty({
       example: '+1234567890',
-      description: 'Phone number of the candidate',
+      description: 'Phone number of the candinate',
       maxLength: 20,
    })
    @IsString()
    @IsNotEmpty()
    @MaxLength(20)
-   candidate_number: string;
+   candinate_number: string;
 
    @ApiProperty({
       example: 'alice@example.com',
-      description: 'Email address of the candidate',
+      description: 'Email address of the candinate',
       maxLength: 100,
    })
    @IsString()
    @IsNotEmpty()
    @MaxLength(100)
-   candidate_email: string;
+   candinate_email: string;
 
    @ApiPropertyOptional({
       type: 'string',
       format: 'binary',
-      description: 'Resume file uploaded by the candidate',
+      description: 'Resume file uploaded by the candinate',
    })
    @IsOptional()
    @IsString()
    @MaxLength(255)
-   candidate_resume?: string;
+   candinate_resume?: string;
 
    @ApiProperty({
       example: 'I am excited to apply for this position.',
-      description: 'Candidate’s message or cover letter',
+      description: 'candinate’s message or cover letter',
       maxLength: 1000,
    })
    @IsString()
    @IsNotEmpty()
    @MaxLength(1000)
-   candidate_message: string;
+   candinate_message: string;
 
    @ApiProperty({
       example: '653bc7e9fc13ae3a5c000123',
-      description: 'ID of the vacancy the candidate is applying to',
+      description: 'ID of the vacancy the candinate is applying to',
    })
    @IsString()
    @IsOptional()

@@ -4,7 +4,7 @@ import { EmployersService } from './employers.service';
 import { AdminGuard } from '../auth/admin.guard';
 import { CreateEmployerDto, UpdateEmployerDto } from './employer.dto';
 import { ImageService } from '../images/image.service';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateEmployerDtoSW, GetAllEmployersResponseDto, UpdateEmployerDtoSW } from 'src/swagger/employers.sw.dto';
 
 
@@ -26,7 +26,8 @@ export class EmployersController {
    @ApiResponse({ status: 200, description: `{message:success, statusCode:200, data:{}}` })
    async getAll() {
       try {
-         return this.employersService.findAll();
+         const response = await this.employersService.findAll();
+         return { message: 'success', statusCode: 200, data: response };
       } catch (error) {
          if (error instanceof BadRequestException) {
             throw error;
@@ -37,6 +38,7 @@ export class EmployersController {
 
 
    @Get(":id")
+   @ApiParam({ name: 'id', required: true, description: 'Employer ID' })
    @ApiOperation({ summary: 'Get employer by ID' })
    @ApiOkResponse({
       description: 'Returns one employer',
@@ -46,7 +48,8 @@ export class EmployersController {
    @ApiResponse({ status: 404, description: 'Employer not found' })
    async getByfindOne(@Param('id') id: string) {
       try {
-         return this.employersService.findOne(id);
+         const response = await this.employersService.findOne(id);
+         return { message: 'success', statusCode: 200, data: response };
       } catch (error) {
          if (error instanceof BadRequestException) {
             throw error;
@@ -81,6 +84,7 @@ export class EmployersController {
    }
 
    @Put(':id')
+   @ApiParam({ name: 'id', required: true, description: 'Employer ID' })
    @ApiOperation({ summary: 'Update employer' })
    @ApiConsumes('multipart/form-data')
    @ApiOkResponse({

@@ -5,7 +5,7 @@ import { Response } from 'express';
 import * as path from 'path';
 
 
-@Controller('images')
+@Controller('files')
 export class ImageController {
    constructor(private readonly imageService: ImageService) { }
 

@@ -3,10 +3,11 @@ import { Controller, Post, Body, Get, Param, Put, Delete, BadRequestException, U
 import { VacanciesService } from './vacancies.service';
 import { AdminGuard } from '../auth/admin.guard';
 import { CreateVacancyDto, UpdateVacancyDto } from './vacancies.dto';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse, ApiBody, ApiConsumes, ApiOkResponse } from '@nestjs/swagger';
-import { CreateVacancyDtoSW, GetAllVacanciesResponseDto, UpdateVacancyDtoSW } from 'src/swagger/vacancies.sw.dto';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse, ApiBody, ApiConsumes, ApiOkResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
+import { CreateVacancyDtoSW, GetAllVacanciesResponseDto, UpdateVacancyDtoSW, VacancyResponseDto } from 'src/swagger/vacancies.sw.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageService } from 'src/images/image.service';
+import { Query } from '@nestjs/common';
 
 
 @ApiTags('Vacancies')
@@ -20,18 +21,25 @@ export class VacanciesController {
 
   @Get()
   @ApiOperation({ summary: 'Get all vacancies' })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  @ApiOkResponse({
+    description: 'Returns paginated vacancies',
+    type: GetAllVacanciesResponseDto,
+  })
   @ApiResponse({ status: 200, description: 'Returns all vacancies', type: GetAllVacanciesResponseDto })
-  async findAll() {
+  async findAll(@Query('page') page: number = 1, @Query('limit') limit: number = 10,) {
     try {
-      return this.vacanciesService.findAll();
+      return this.vacanciesService.findAll(page, limit);
     } catch (error) {
       throw new BadRequestException('Failed to get vacancies');
     }
   }
 
   @Get(':id')
+  @ApiParam({ name: 'id', required: true, description: 'Vacancy ID' })
   @ApiOperation({ summary: 'Get vacancy by ID' })
-  @ApiResponse({ status: 200, description: 'Returns one vacancy', type: GetAllVacanciesResponseDto })
+  @ApiResponse({ status: 200, description: 'Returns one vacancy', type: VacancyResponseDto })
   @ApiResponse({ status: 404, description: 'Vacancy not found' })
   async findOne(@Param('id') id: string) {
     try {
@@ -51,23 +59,31 @@ export class VacanciesController {
   @UseInterceptors(FileInterceptor('vacancy_image'))
   async create(@Body() CreateVacancyDto: CreateVacancyDto, @UploadedFile() vacancy_image: Express.Multer.File) {
     try {
+      console.log(vacancy_image, 111);
+
       if (!vacancy_image) {
-        throw new BadRequestException('vacancy_image file is required');
+        const error = new BadRequestException('vacancy_image file is required');
+        throw error;
       }
       const imageName = await this.imageService.saveImage(vacancy_image);
       const vacancyData = { ...CreateVacancyDto, vacancy_image: imageName };
       return this.vacanciesService.create(vacancyData);
-    } catch {
+    } catch (error) {
+      console.log(error);
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
       throw new BadRequestException('Failed to create vacancy');
     }
   }
 
   @Put(':id')
+  @ApiParam({ name: 'id', required: true, description: 'Vacancy ID' })
   @ApiOperation({ summary: 'Update vacancy' })
   @ApiConsumes('multipart/form-data')
   @ApiOkResponse({
     description: 'Return vacancy which updated, even you can update only name or positon or image I mean you just sent udated key to backend',
-    type: GetAllVacanciesResponseDto,
+    type: VacancyResponseDto,
   })
   @ApiBody({ type: UpdateVacancyDtoSW })
   @ApiResponse({ status: 200, description: 'message: "success", statusCode:200, data:{}' })
@@ -88,12 +104,13 @@ export class VacanciesController {
 
       return this.vacanciesService.update(id, UpdateVacancyDto);
     } catch (error) {
-      throw new BadRequestException('Failed to update employer');
+      throw new BadRequestException('Failed to update vacancy');
     }
   }
 
 
   @Delete(':id')
+  @ApiParam({ name: 'id', required: true, description: 'Vacancy ID' })
   @ApiOperation({ summary: 'Delete vacancy' })
   @ApiResponse({ status: 200, description: 'message: "success", statusCode:204, data:{}' })
   @ApiResponse({ status: 404, description: 'Vacancy not found' })

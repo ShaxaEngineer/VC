@@ -1,9 +1,16 @@
-import { Schema } from 'mongoose';
+// src/news/schemas/news.schema.ts
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
-export const NewsSchema = new Schema(
-   {
-      title: { type: String, required: true },
-      content: { type: String, required: true },
-   },
-   { timestamps: true }
-);
+export type NewsDocument = News & Document;
+
+@Schema({ timestamps: true })
+export class News {
+   @Prop({ required: true })
+   title: string;
+
+   @Prop({ required: true })
+   content: string;
+}
+
+export const NewsSchema = SchemaFactory.createForClass(News);

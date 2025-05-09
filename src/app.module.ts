@@ -21,6 +21,7 @@ import { ImageModule } from './images/image.module';
     ImageModule,
     VacanciesModule,
     MulterModule.register({
+      limits: { fileSize: 5 * 1024 * 1024 }, // Enforce 5 MB max at the config level too
       dest: './uploads', // Set the destination directory for uploads
     }),
     AuthModule

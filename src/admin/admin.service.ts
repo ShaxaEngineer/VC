@@ -14,7 +14,7 @@ export class AdminService {
 
    ) { }
 
-   async createAdmin(username: string, password: string): Promise<{ access_token: string }> {
+   async createAdmin(username: string, password: string): Promise<{ statusCode: string; access_token: string }> {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const admin = new this.adminModel({ username, password: hashedPassword });
@@ -23,7 +23,7 @@ export class AdminService {
       const payload = { username: admin.username, sub: admin._id, role: 'admin' };
       const access_token = this.jwtService.sign(payload);
 
-      return { access_token };
+      return { statusCode: '201', access_token: access_token };
    }
 
    async loginAdmin(username: string, password: string): Promise<any> {
@@ -47,8 +47,7 @@ export class AdminService {
 
       return {
          statusCode: 200,
-         message: 'Login successful',
-         token
+         access_token: token
       };
    }
 }
