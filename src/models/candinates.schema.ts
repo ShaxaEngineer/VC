@@ -1,15 +1,29 @@
-import { Schema } from 'mongoose';
+// src/admin/schemas/candidate.schema.ts
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Vacancy } from '../models/vacancies.schema'; // Adjust the import based on your project structure
 
-export const CandidateSchema = new Schema(
-   {
-      candidate_name: { type: String, required: true },
-      candidate_number: { type: String, required: true },
-      candidate_email: { type: String, required: true },
-      candidate_resume: { type: String }, // Filename of the uploaded resume
-      candidate_message: { type: String, required: true }, // Candidate's message
-      applied_vacancy_id: { type: Schema.Types.ObjectId, ref: 'Vacancy' },
-   },
-   { timestamps: true }
-);
+export type CandidateDocument = Candidate & Document;
 
+@Schema({ timestamps: true })
+export class Candidate {
+   @Prop({ required: true })
+   candidate_name: string;
 
+   @Prop({ required: true })
+   candidate_number: string;
+
+   @Prop({ required: true })
+   candidate_email: string;
+
+   @Prop()
+   candidate_resume: string; // Filename of the uploaded resume
+
+   @Prop({ required: true })
+   candidate_message: string; // Candidate's message
+
+   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Vacancy' })
+   applied_vacancy_id: Types.ObjectId;
+}
+
+export const CandidateSchema = SchemaFactory.createForClass(Candidate);

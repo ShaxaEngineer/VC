@@ -8,7 +8,6 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiRe
 import { CreateEmployerDtoSW, GetAllEmployersResponseDto, UpdateEmployerDtoSW } from 'src/swagger/employers.sw.dto';
 
 
-@Controller('employers')
 @ApiTags('Employers')
 @ApiBearerAuth()
 @Controller('employers')
