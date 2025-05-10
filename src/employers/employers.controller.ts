@@ -61,7 +61,7 @@ export class EmployersController {
    @Post('create')
    @ApiOperation({ summary: 'Create a new employer' })
    @ApiBody({ type: CreateEmployerDtoSW })
-   @ApiResponse({ status: 201, description: `message: success, statusCode:201, data:{}` })
+   @ApiResponse({ status: 201, description: `message: success, statusCode:201, data:{}`, type: GetAllEmployersResponseDto })
    @ApiResponse({ status: 400, description: 'Bad Request' })
    @UseGuards(AdminGuard)
    async create(@Body() createEmployerDto: CreateEmployerDto) {

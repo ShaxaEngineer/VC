@@ -29,7 +29,7 @@ export class CreateVacancyDtoSW {
    @IsNotEmpty()
    vacancy_category: string;
 
-   @ApiProperty({ example: 'https://example.com/image.jpg', description: 'Vacancy image URL' })
+   @ApiProperty({ example: 'image.jpg, you can make URL', description: 'Vacancy image URL' })
    vacancy_image: string;
 
    @ApiProperty({ example: ['Junior', 'Senior'], description: 'List of available positions' })
@@ -41,22 +41,18 @@ export class CreateVacancyDtoSW {
 
 export class UpdateVacancyDtoSW {
    @ApiPropertyOptional({ example: 'Frontend Developer', description: 'Name of the vacancy' })
-   @IsOptional()
    @IsString()
    vacancy_name?: string;
 
    @ApiPropertyOptional({ example: 'IT', description: 'Category of the vacancy' })
-   @IsOptional()
    @IsString()
    vacancy_category?: string;
 
-   @ApiPropertyOptional({ example: 'https://example.com/image.jpg', description: 'Vacancy image URL' })
-   @IsOptional()
+   @ApiPropertyOptional({ example: 'image.jpg, you can make URL', description: 'Vacancy image URL' })
    @IsString()
    vacancy_image?: string;
 
    @ApiPropertyOptional({ example: ['Junior', 'Senior'], description: 'List of available positions' })
-   @IsOptional()
    @IsArray()
    @IsString({ each: true })
    vacancy_positions?: string[];
@@ -70,7 +66,7 @@ export class VacancyResponseDto {
    @ApiProperty({ example: 'IT' })
    vacancy_category: string;
 
-   @ApiProperty({ example: 'https://example.com/image.jpg' })
+   @ApiProperty({ example: 'image.jpg, you can create URL' })
    vacancy_image: string;
 
    @ApiProperty({ example: ['Junior', 'Senior'] })
@@ -84,6 +80,21 @@ export class VacancyResponseDto {
 
    @ApiProperty({ example: '653bc7e9fc13ae3a5c000004' })
    _id: string;
+}
+
+
+export class UpdatedVacancy {
+   @ApiProperty({ example: 'success', description: 'Response message' })
+   message: string;
+
+   @ApiProperty({ example: 200, description: 'HTTP status code' })
+   statusCode: number;
+
+   @ApiProperty({
+      type: [VacancyResponseDto],
+      description: 'Vacancy items',
+   })
+   data: VacancyResponseDto[];
 }
 
 class MetaDto {

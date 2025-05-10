@@ -4,7 +4,7 @@ import { VacanciesService } from './vacancies.service';
 import { AdminGuard } from '../auth/admin.guard';
 import { CreateVacancyDto, UpdateVacancyDto } from './vacancies.dto';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse, ApiBody, ApiConsumes, ApiOkResponse, ApiQuery, ApiParam } from '@nestjs/swagger';
-import { CreateVacancyDtoSW, GetAllVacanciesResponseDto, UpdateVacancyDtoSW, VacancyResponseDto } from 'src/swagger/vacancies.sw.dto';
+import { CreateVacancyDtoSW, GetAllVacanciesResponseDto, UpdatedVacancy, UpdateVacancyDtoSW, VacancyResponseDto } from 'src/swagger/vacancies.sw.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImageService } from 'src/images/image.service';
 import { Query } from '@nestjs/common';
@@ -39,7 +39,7 @@ export class VacanciesController {
   @Get(':id')
   @ApiParam({ name: 'id', required: true, description: 'Vacancy ID' })
   @ApiOperation({ summary: 'Get vacancy by ID' })
-  @ApiResponse({ status: 200, description: 'Returns one vacancy', type: VacancyResponseDto })
+  @ApiResponse({ status: 200, description: 'Returns one vacancy', type: UpdatedVacancy })
   @ApiResponse({ status: 404, description: 'Vacancy not found' })
   async findOne(@Param('id') id: string) {
     try {
@@ -52,14 +52,13 @@ export class VacanciesController {
   @Post('create')
   @ApiOperation({ summary: 'Create a new Vacancy' })
   @ApiBody({ type: CreateVacancyDtoSW })
-  @ApiResponse({ status: 201, description: `message: success, statusCode:201, data:{}` })
+  @ApiResponse({ status: 201, description: "Returns one vacancy", type: UpdatedVacancy })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @UseGuards(AdminGuard)
   async create(@Body() CreateVacancyDto: CreateVacancyDto) {
     try {
       return this.vacanciesService.create(CreateVacancyDto);
     } catch (error) {
-      console.log(error);
       if (error instanceof BadRequestException) {
         throw error;
       }
@@ -71,8 +70,8 @@ export class VacanciesController {
   @ApiParam({ name: 'id', required: true, description: 'Vacancy ID' })
   @ApiOperation({ summary: 'Update vacancy' })
   @ApiOkResponse({
-    description: 'Return vacancy which updated, even you can update only name or positon or image I mean you just sent udated key to backend',
-    type: VacancyResponseDto,
+    description: 'Return vacancy which updated',
+    type: UpdatedVacancy,
   })
   @ApiBody({ type: UpdateVacancyDtoSW })
   @ApiResponse({ status: 200, description: 'message: "success", statusCode:200, data:{}' })
@@ -90,7 +89,7 @@ export class VacanciesController {
   @Delete(':id')
   @ApiParam({ name: 'id', required: true, description: 'Vacancy ID' })
   @ApiOperation({ summary: 'Delete vacancy' })
-  @ApiResponse({ status: 200, description: 'message: "success", statusCode:204, data:{}' })
+  @ApiResponse({ status: 200, description: 'message: "success", statusCode:204, data:vacancy with ID ${id} deleted successfully.' })
   @ApiResponse({ status: 404, description: 'Vacancy not found' })
   @UseGuards(AdminGuard)
   async delete(@Param('id') id: string) {
