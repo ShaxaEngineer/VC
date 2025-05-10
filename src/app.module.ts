@@ -11,6 +11,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ImageModule } from './images/image.module';
 import { ContactModule } from './contact/contact.module';
 import { LetstalkModule } from './letstalk/letstalk.module';
+import { PartnersModule } from './partners/partners.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { LetstalkModule } from './letstalk/letstalk.module';
     }),
     AuthModule,
     ContactModule,
-    LetstalkModule
+    LetstalkModule,
+    PartnersModule
   ],
 })
 export class AppModule { }
