@@ -1,4 +1,4 @@
-// src/admin/schemas/admin.schema.ts
+// src/admin/schemas/admin.schema.tss
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
