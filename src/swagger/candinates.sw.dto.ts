@@ -24,7 +24,7 @@ export class CreateCandinateDtoSW {
    @MaxLength(100)
    candinate_email: string;
 
-   @ApiPropertyOptional({ type: 'string', format: 'binary', description: 'Resume file' })
+   @ApiPropertyOptional({ type: 'string', format: 'binary', description: 'Resume file, file you have to sent URL of file which backend returend' })
    @IsOptional()
    @IsString()
    @MaxLength(255)

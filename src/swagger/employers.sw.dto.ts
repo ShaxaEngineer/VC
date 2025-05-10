@@ -39,7 +39,7 @@ export class CreateEmployerDtoSW {
    })
    @IsString()
    @IsNotEmpty()
-   @MaxLength(255, { message: 'Image filename must be at most 255 characters' })
+   @MaxLength(255, { message: 'Image must be url .. filename must be at most 255 characters' })
    employer_image: string;
 }
 
@@ -87,7 +87,6 @@ export class UpdateEmployerDtoSW {
       description: 'First name of the employer',
       maxLength: 80,
    })
-   @IsOptional()
    @IsString()
    @MaxLength(80, { message: 'First name must be at most 80 characters' })
    employer_first_name?: string;
@@ -97,7 +96,6 @@ export class UpdateEmployerDtoSW {
       description: 'Last name of the employer',
       maxLength: 80,
    })
-   @IsOptional()
    @IsString()
    @MaxLength(80, { message: 'Last name must be at most 80 characters' })
    employer_last_name?: string;
@@ -107,7 +105,6 @@ export class UpdateEmployerDtoSW {
       description: 'Position of the employer',
       maxLength: 100,
    })
-   @IsOptional()
    @IsString()
    @MaxLength(100, { message: 'Position must be at most 100 characters' })
    employer_position?: string;
@@ -117,7 +114,6 @@ export class UpdateEmployerDtoSW {
       format: 'binary',
       description: 'Updated image file of the employer',
    })
-   @IsOptional()
    @IsString()
    @MaxLength(255, { message: 'Image filename must be at most 255 characters' })
    employer_image?: string;

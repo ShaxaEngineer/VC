@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, UseInterceptors, UploadedFile, Body, BadRequestException, Put, Param, Delete, Get, } from '@nestjs/common';
+import { Controller, Post, UseGuards, UseInterceptors, UploadedFile, Body, BadRequestException, Put, Param, Delete, Get, NotFoundException, } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EmployersService } from './employers.service';
 import { AdminGuard } from '../auth/admin.guard';
@@ -60,21 +60,13 @@ export class EmployersController {
 
    @Post('create')
    @ApiOperation({ summary: 'Create a new employer' })
-   @ApiConsumes('multipart/form-data')
    @ApiBody({ type: CreateEmployerDtoSW })
    @ApiResponse({ status: 201, description: `message: success, statusCode:201, data:{}` })
    @ApiResponse({ status: 400, description: 'Bad Request' })
    @UseGuards(AdminGuard)
-   @UseInterceptors(FileInterceptor('employer_image'))
-   async create(@Body() createEmployerDto: CreateEmployerDto, @UploadedFile() employer_image: Express.Multer.File) {
+   async create(@Body() createEmployerDto: CreateEmployerDto) {
       try {
-         if (!employer_image) {
-            throw new BadRequestException('employer_image file is required');
-         }
-
-         const imageName = await this.imageService.saveImage(employer_image);
-         const employerData = { ...createEmployerDto, employer_image: imageName };
-         return this.employersService.create(employerData);
+         return this.employersService.create(createEmployerDto);
       } catch (error) {
          if (error instanceof BadRequestException) {
             throw error;
@@ -86,31 +78,20 @@ export class EmployersController {
    @Put(':id')
    @ApiParam({ name: 'id', required: true, description: 'Employer ID' })
    @ApiOperation({ summary: 'Update employer' })
-   @ApiConsumes('multipart/form-data')
    @ApiOkResponse({
-      description: 'Returns employer which updated, even you can update only firstname or lastname or image I mean you just sent udated key to backend',
+      description: 'Updated employer',
       type: GetAllEmployersResponseDto,
    })
    @ApiBody({ type: UpdateEmployerDtoSW })
    @ApiResponse({ status: 200, description: 'message: "success", statusCode:200, data:{}' })
    @ApiResponse({ status: 404, description: 'Employer not found' })
    @UseGuards(AdminGuard)
-   @UseInterceptors(FileInterceptor('employer_image'))
-   async update(@Param('id') id: string, @Body() updateEmployerDto: UpdateEmployerDto, @UploadedFile() employer_image?: Express.Multer.File) {
+   async update(@Param('id') id: string, @Body() updateEmployerDto: UpdateEmployerDto) {
       try {
-         const employer = await this.employersService.findOne(id);
-
-         if (employer_image) {
-            if (employer.data.employer_image) {
-               await this.imageService.deleteImage(employer.data.employer_image);
-            }
-            const imageName = await this.imageService.saveImage(employer_image);
-            updateEmployerDto.employer_image = imageName;
-         }
-
          return this.employersService.update(id, updateEmployerDto);
       } catch (error) {
-         throw new BadRequestException('Failed to update employer');
+         if (error instanceof NotFoundException) throw error;
+         throw new BadRequestException('Failed to delete employer');
       }
    }
 
@@ -122,19 +103,18 @@ export class EmployersController {
    async delete(@Param('id') id: string) {
       try {
          const employer = await this.employersService.findOne(id);
-
-         if (employer.data.employer_image) {
-            await this.imageService.deleteImage(employer.data.employer_image);
+         if (!employer || !employer.data) {
+            throw new NotFoundException(`Employer with ID ${id} not found`);
          }
-
-         const deletedEmployer = await this.employersService.remove(id);
-
+         await this.imageService.deleteImage(employer.data.employer_image);
+         await this.employersService.remove(id);
          return {
             message: 'success',
             statusCode: 200,
             data: `Employer with ID ${id} deleted successfully.`,
          };
       } catch (error) {
+         if (error instanceof NotFoundException) throw error;
          throw new BadRequestException('Failed to delete employer');
       }
    }

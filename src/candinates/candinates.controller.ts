@@ -91,23 +91,13 @@ export class CandinatesController {
 
    @Post('create')
    @ApiOperation({ summary: 'Create a candinate' })
-   @ApiConsumes('multipart/form-data')
    @ApiBody({ type: CreateCandinateDtoSW })
    @ApiResponse({ status: 201, description: `message: success, statusCode:201, data:{}` })
    @ApiResponse({ status: 400, description: 'Bad Request' })
    @UseGuards(AdminGuard)
-   @UseInterceptors(FileInterceptor('candinate_resume'))
-   async create(@Body() CreateCandinateDto: CreateCandinateDto, @UploadedFile() candinate_resume: Express.Multer.File) {
+   async create(@Body() CreateCandinateDto: CreateCandinateDto) {
       try {
-         if (!candinate_resume) {
-            throw new BadRequestException('candinate_resume file is required');
-         }
-
-         const candinateResume = await this.imageService.saveFile(candinate_resume);
-         const candinateData = { ...CreateCandinateDto, candinate_resume: candinateResume };
-
-
-         return this.candinatesService.create(candinateData);
+         return this.candinatesService.create(CreateCandinateDto);
       } catch (error) {
          if (error instanceof BadRequestException) {
             throw error;

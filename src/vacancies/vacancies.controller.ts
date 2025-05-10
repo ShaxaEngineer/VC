@@ -51,23 +51,13 @@ export class VacanciesController {
 
   @Post('create')
   @ApiOperation({ summary: 'Create a new Vacancy' })
-  @ApiConsumes('multipart/form-data')
   @ApiBody({ type: CreateVacancyDtoSW })
   @ApiResponse({ status: 201, description: `message: success, statusCode:201, data:{}` })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @UseGuards(AdminGuard)
-  @UseInterceptors(FileInterceptor('vacancy_image'))
-  async create(@Body() CreateVacancyDto: CreateVacancyDto, @UploadedFile() vacancy_image: Express.Multer.File) {
+  async create(@Body() CreateVacancyDto: CreateVacancyDto) {
     try {
-      console.log(vacancy_image, 111);
-
-      if (!vacancy_image) {
-        const error = new BadRequestException('vacancy_image file is required');
-        throw error;
-      }
-      const imageName = await this.imageService.saveImage(vacancy_image);
-      const vacancyData = { ...CreateVacancyDto, vacancy_image: imageName };
-      return this.vacanciesService.create(vacancyData);
+      return this.vacanciesService.create(CreateVacancyDto);
     } catch (error) {
       console.log(error);
       if (error instanceof BadRequestException) {
@@ -80,7 +70,6 @@ export class VacanciesController {
   @Put(':id')
   @ApiParam({ name: 'id', required: true, description: 'Vacancy ID' })
   @ApiOperation({ summary: 'Update vacancy' })
-  @ApiConsumes('multipart/form-data')
   @ApiOkResponse({
     description: 'Return vacancy which updated, even you can update only name or positon or image I mean you just sent udated key to backend',
     type: VacancyResponseDto,
@@ -89,19 +78,8 @@ export class VacanciesController {
   @ApiResponse({ status: 200, description: 'message: "success", statusCode:200, data:{}' })
   @ApiResponse({ status: 404, description: 'Vacancy not found' })
   @UseGuards(AdminGuard)
-  @UseInterceptors(FileInterceptor('vacancy_image'))
-  async update(@Param('id') id: string, @Body() UpdateVacancyDto: UpdateVacancyDto, @UploadedFile() vacancy_image?: Express.Multer.File) {
+  async update(@Param('id') id: string, @Body() UpdateVacancyDto: UpdateVacancyDto) {
     try {
-      const vacancy = await this.vacanciesService.findOne(id);
-
-      if (vacancy_image) {
-        if (vacancy.data.vacancy_image) {
-          await this.imageService.deleteImage(vacancy.data.vacancy_image);
-        }
-        const imageName = await this.imageService.saveImage(vacancy_image);
-        UpdateVacancyDto.vacancy_image = imageName;
-      }
-
       return this.vacanciesService.update(id, UpdateVacancyDto);
     } catch (error) {
       throw new BadRequestException('Failed to update vacancy');

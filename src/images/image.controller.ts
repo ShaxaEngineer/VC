@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Delete, Res, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Res, NotFoundException, Post, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
 import { ImageService } from './image.service';
 import * as fs from 'fs';
 import { Response } from 'express';
 import * as path from 'path';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 
 @Controller('files')
@@ -18,6 +19,20 @@ export class ImageController {
          return res.sendFile(fullPath);
       } else {
          throw new NotFoundException('Image not found');
+      }
+   }
+
+   @Post("/create")
+   @UseInterceptors(FileInterceptor('file'))
+   async createFile(@UploadedFile() file: Express.Multer.File) {
+      if (!file) {
+         throw new BadRequestException('No file uploaded');
+      }
+      try {
+         const fileUrl = await this.imageService.saveFile(file);
+         return { file: fileUrl };
+      } catch (error) {
+         throw new BadRequestException(error.message);
       }
    }
 

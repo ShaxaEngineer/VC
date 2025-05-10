@@ -23,22 +23,18 @@ export class CreateEmployerDto {
 
 
 export class UpdateEmployerDto {
-  @IsOptional()
   @IsString()
   @MaxLength(50)
   employer_first_name?: string;
 
-  @IsOptional()
   @IsString()
   @MaxLength(50)
   employer_last_name?: string;
 
-  @IsOptional()
   @IsString()
   @MaxLength(100)
   employer_position?: string;
 
-  @IsOptional()
   @IsString()
   @MaxLength(255)
   employer_image?: string;
