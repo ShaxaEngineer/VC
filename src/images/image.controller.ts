@@ -36,7 +36,7 @@ export class ImageController {
       }
    }
 
-   @Delete(':filename')
+   // @Delete(':filename')
    async deleteImage(@Param('filename') filename: string) {
       try {
          await this.imageService.deleteImage(filename);
