@@ -98,7 +98,6 @@ export class CandinatesController {
       type: CandinateResponseSingleDto,
    })
    @ApiResponse({ status: 400, description: 'Bad Request' })
-   @UseGuards(AdminGuard)
    async create(@Body() CreateCandinateDto: CreateCandinateDto) {
       try {
          return this.candinatesService.create(CreateCandinateDto);
