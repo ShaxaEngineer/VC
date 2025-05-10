@@ -8,13 +8,13 @@ export type ContactDocument = Contact & Document;
 @Schema({ timestamps: true })
 export class Contact {
    @Prop({ required: true })
-   fullname: string;
+   contact_fullname: string;
 
    @Prop({ required: true })
-   email: string;
+   contact_email: string;
 
    @Prop({ required: true })
-   message: string;
+   contact_message: string;
 }
 
 export const ContactSchema = SchemaFactory.createForClass(Contact);
