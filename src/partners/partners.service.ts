@@ -40,7 +40,7 @@ export class PartnerService {
             message: 'Partners fetched successfully',
             statusCode: 200,
             data: partners,
-            pagination: {
+            meta: {
                total,
                page,
                limit,
