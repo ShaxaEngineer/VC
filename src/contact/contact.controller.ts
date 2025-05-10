@@ -1,10 +1,11 @@
 // src/contact/contact.controller.ts
-import { Query } from '@nestjs/common';
+import { Delete, Param, Query } from '@nestjs/common';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import {
    ApiBearerAuth,
    ApiBody,
    ApiOperation,
+   ApiParam,
    ApiResponse,
    ApiTags,
 } from '@nestjs/swagger';
@@ -38,6 +39,18 @@ export class ContactController {
       @Query('limit') limit = 10,
    ) {
       return this.contactService.getAllContacts(Number(page), Number(limit));
+   }
+
+
+
+   @Delete(':id')
+   @UseGuards(AdminGuard)
+   @ApiOperation({ summary: 'Delete a contact message by ID (Admin only)' })
+   @ApiParam({ name: 'id', required: true, description: 'ID of the contact to delete' })
+   @ApiResponse({ status: 200, description: 'Contact deleted successfully' })
+   @ApiResponse({ status: 404, description: 'Contact not found' })
+   async deleteContact(@Param('id') id: string) {
+      return this.contactService.deleteContact(id);
    }
 
 }

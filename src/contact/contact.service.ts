@@ -43,4 +43,22 @@ export class ContactService {
       };
    }
 
+   async deleteContact(id: string): Promise<any> {
+      const deleted = await this.contactModel.findByIdAndDelete(id).lean();
+
+      if (!deleted) {
+         return {
+            statusCode: 404,
+            message: 'Contact not found',
+         };
+      }
+
+      return {
+         statusCode: 200,
+         message: 'Contact deleted successfully',
+         data: deleted,
+      };
+   }
+
+
 }
