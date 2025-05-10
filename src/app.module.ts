@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MulterModule } from '@nestjs/platform-express';
 import { ImageModule } from './images/image.module';
 import { ContactModule } from './contact/contact.module';
+import { LetstalkModule } from './letstalk/letstalk.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { ContactModule } from './contact/contact.module';
       dest: './uploads', // Set the destination directory for uploads
     }),
     AuthModule,
-    ContactModule
+    ContactModule,
+    // LetstalkModule
   ],
 })
 export class AppModule { }
