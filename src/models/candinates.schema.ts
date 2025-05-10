@@ -16,6 +16,9 @@ export class Candinate {
    @Prop({ required: true })
    candinate_email: string;
 
+   @Prop({ required: true })
+   candinate_position: string;
+
    @Prop()
    candinate_resume: string; // Filename of the uploaded resume
 

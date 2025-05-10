@@ -6,10 +6,15 @@ import { CandinateSchema, Candinate } from 'src/models/candinates.schema';
 import { AuthModule } from 'src/auth/auth.module';
 import { ImageModule } from 'src/images/image.module';
 import { ImageService } from 'src/images/image.service';
+import { Vacancy, VacancySchema } from 'src/models/vacancies.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Candinate.name, schema: CandinateSchema }]),
+    MongooseModule.forFeature([
+      { name: Candinate.name, schema: CandinateSchema },
+      { name: Vacancy.name, schema: VacancySchema }
+    ]),
+
     AuthModule,
     ImageModule
   ],

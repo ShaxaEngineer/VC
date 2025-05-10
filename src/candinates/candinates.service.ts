@@ -1,27 +1,44 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Candinate, CandinateDocument } from '../models/candinates.schema';
 import { CreateCandinateDto } from './candinates.dto';
+import { Vacancy, VacancyDocument } from 'src/models/vacancies.schema';
 
 @Injectable()
 export class CandinatesService {
    constructor(
-      @InjectModel(Candinate.name)
-      private readonly candidateModel: Model<CandinateDocument>,
+      @InjectModel(Candinate.name) private readonly candidateModel: Model<CandinateDocument>,
+      @InjectModel(Vacancy.name) private readonly vacancyModel: Model<VacancyDocument>,
    ) { }
 
    async create(
-      CreateCandinateDto: CreateCandinateDto,
+      createCandidateDto: CreateCandinateDto,
    ): Promise<{ message: string; statusCode: number; data: any }> {
-      const newCandidate = new this.candidateModel(CreateCandinateDto);
+      const { applied_vacancy_id, candinate_position } = createCandidateDto;
+
+      const checkVacancy = await this.vacancyModel.findById(applied_vacancy_id);
+      if (!checkVacancy) {
+         throw new NotFoundException(`Vacancy with ID ${applied_vacancy_id} not found`);
+      }
+
+      const hasPosition = checkVacancy.vacancy_positions?.includes(candinate_position);
+      if (!hasPosition) {
+         throw new BadRequestException(`The position "${candinate_position}" is not available in the vacancy`);
+      }
+
+      const newCandidate = new this.candidateModel(createCandidateDto);
       const savedCandidate = await newCandidate.save();
+      const populatedCandidate = await savedCandidate.populate('applied_vacancy_id');
+
       return {
          message: 'success',
          statusCode: 201,
-         data: savedCandidate,
+         data: populatedCandidate,
       };
    }
+
+
 
    async findAll(page = 1, limit = 10): Promise<any> {
       const skip = (page - 1) * limit;

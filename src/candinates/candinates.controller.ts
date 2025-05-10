@@ -2,7 +2,7 @@ import { BadRequestException, Body, Controller, Get, Param, Post, UploadedFile, 
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CandinatesService } from './candinates.service';
 import { ImageService } from 'src/images/image.service';
-import { CandinateResponseDto, CreateCandinateDtoSW, GetAllCandinatesResponseDto } from 'src/swagger/candinates.sw.dto';
+import { CandinateResponseDto, CandinateResponseSingleDto, CreateCandinateDtoSW, GetAllCandinatesResponseDto } from 'src/swagger/candinates.sw.dto';
 import { AdminGuard } from 'src/auth/admin.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateCandinateDto } from './candinates.dto';
@@ -75,7 +75,7 @@ export class CandinatesController {
    @ApiResponse({
       status: 200,
       description: 'Returns a single candidate',
-      type: CandinateResponseDto,
+      type: CandinateResponseSingleDto,
    })
    @ApiResponse({
       status: 404,
@@ -92,7 +92,11 @@ export class CandinatesController {
    @Post('create')
    @ApiOperation({ summary: 'Create a candinate' })
    @ApiBody({ type: CreateCandinateDtoSW })
-   @ApiResponse({ status: 201, description: `message: success, statusCode:201, data:{}` })
+   @ApiResponse({
+      status: 201,
+      description: 'message: success, statusCode:201, data:{}',
+      type: CandinateResponseSingleDto,
+   })
    @ApiResponse({ status: 400, description: 'Bad Request' })
    @UseGuards(AdminGuard)
    async create(@Body() CreateCandinateDto: CreateCandinateDto) {

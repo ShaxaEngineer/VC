@@ -12,6 +12,12 @@ export class CreateCandinateDtoSW {
    @MaxLength(100)
    candinate_name: string;
 
+   @ApiProperty({ example: 'Manager', description: 'Postion of the candinate ', maxLength: 100 })
+   @IsString()
+   @IsNotEmpty()
+   @MaxLength(100)
+   candinate_postion: string;
+
    @ApiProperty({ example: '+1234567890', description: 'Phone number', maxLength: 20 })
    @IsString()
    @IsNotEmpty()
@@ -41,7 +47,6 @@ export class CreateCandinateDtoSW {
    @IsOptional()
    applied_vacancy_id?: string;
 }
-
 export class CandinateResponseDto {
    @ApiProperty({ example: 'Alice Smith', description: 'Full name of the candinate', maxLength: 100 })
    @IsString()
@@ -54,6 +59,14 @@ export class CandinateResponseDto {
    @IsNotEmpty()
    @MaxLength(20)
    candinate_number: string;
+
+
+   @ApiProperty({ example: 'Manager', description: 'Postion of the candinate ', maxLength: 100 })
+   @IsString()
+   @IsNotEmpty()
+   @MaxLength(100)
+   candinate_postion: string;
+
 
    @ApiProperty({ example: 'alice@example.com', description: 'Email address of the candinate', maxLength: 100 })
    @IsString()
@@ -83,10 +96,20 @@ export class CandinateResponseDto {
    applied_vacancy_id?: string;
 }
 
-export class PaginatedCandinatesDto {
-   @ApiProperty({ description: 'List of candidate details', type: [CandinateResponseDto] })
-   items: CandinateResponseDto[];
+export class CandinateResponseSingleDto {
+   @ApiProperty({ description: 'Response message indicating the success of the operation', example: 'success' })
+   message: string;
 
+   @ApiProperty({ description: 'HTTP status code of the response', example: 200 })
+   statusCode: number;
+
+   @ApiProperty({ description: 'Data for the candidates including pagination details' })
+   data: CandinateResponseDto;
+}
+
+
+
+export class PaginatedCandinatesDto {
    @ApiProperty({ description: 'Total number of candidates in the database', example: 100 })
    totalItems: number;
 
@@ -104,8 +127,12 @@ export class GetAllCandinatesResponseDto {
    @ApiProperty({ description: 'HTTP status code of the response', example: 200 })
    statusCode: number;
 
-   @ApiProperty({ description: 'Data for the candidates including pagination details', type: PaginatedCandinatesDto })
-   data: PaginatedCandinatesDto;
+   @ApiProperty({ description: 'Data for the candidates including pagination details', type: CandinateResponseDto })
+   data: CandinateResponseDto[];
+
+
+   @ApiProperty({ type: PaginatedCandinatesDto, description: 'Pagination metadata' })
+   meta: PaginatedCandinatesDto;
 }
 
 
@@ -115,6 +142,13 @@ export class UpdateCandinateDtoSW {
    @IsString()
    @MaxLength(100)
    candinate_name?: string;
+
+
+   @ApiPropertyOptional({ example: 'Manager', maxLength: 100 })
+   @IsOptional()
+   @IsString()
+   @MaxLength(100)
+   candinate_position?: string;
 
    @ApiPropertyOptional({ example: '+1234567890', maxLength: 20 })
    @IsOptional()

@@ -1,6 +1,6 @@
 // src/admin/dto/create-candidate.dto.ts
 
-import { IsString, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, MaxLength, IsMongoId } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateCandinateDto {
@@ -39,7 +39,7 @@ export class CreateCandinateDto {
       format: 'binary',
       description: 'Resume file uploaded by the candinate',
    })
-   @IsOptional()
+   @IsNotEmpty()
    @IsString()
    @MaxLength(255)
    candinate_resume?: string;
@@ -54,11 +54,18 @@ export class CreateCandinateDto {
    @MaxLength(1000)
    candinate_message: string;
 
+   @IsString()
+   @IsNotEmpty()
+   @MaxLength(1000)
+   candinate_position: string;
+
+
    @ApiProperty({
       example: '653bc7e9fc13ae3a5c000123',
       description: 'ID of the vacancy the candinate is applying to',
    })
    @IsString()
-   @IsOptional()
+   @IsMongoId({ message: 'applied_vacancy_id must be a valid MongoDB ObjectId' })
+   @IsNotEmpty()
    applied_vacancy_id?: string;
 }
