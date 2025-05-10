@@ -47,7 +47,7 @@ export class CandinatesController {
 
 
    @Get("")
-   @ApiOperation({ summary: 'Get all candinates' })
+   @ApiOperation({ summary: 'Get all, candinates' })
    @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
    @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
    @ApiOkResponse({
@@ -88,6 +88,7 @@ export class CandinatesController {
          throw error;
       }
    }
+
 
    @Post('create')
    @ApiOperation({ summary: 'Create a candinate' })
