@@ -54,7 +54,6 @@ export class CandinatesService {
       ]);
 
       return {
-
          message: 'success',
          statusCode: 200,
          data: items,
@@ -65,7 +64,7 @@ export class CandinatesService {
          }
       };
    }
-
+   //finall
    async findAllByVacancyId(vacancyId: string, page = 1, limit = 10): Promise<any> {
       const skip = (page - 1) * limit;
 
