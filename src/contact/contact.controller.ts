@@ -1,6 +1,6 @@
 // src/contact/contact.controller.ts
 
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import {
    ApiBearerAuth,
    ApiBody,
@@ -11,6 +11,7 @@ import {
 import { ContactService } from './contact.service';
 import { CreateContactDtoSW } from 'src/swagger/contact.sw.dto';
 import { CreateContactDto } from './contact.dto';
+import { AdminGuard } from 'src/auth/admin.guard';
 
 @Controller('contacts')
 @ApiTags('Contacts')
@@ -28,6 +29,7 @@ export class ContactController {
    }
 
    @Get()
+   @UseGuards(AdminGuard)
    @ApiOperation({ summary: 'Get all contact messages' })
    @ApiResponse({ status: 200, description: 'List of contacts' })
    async getAllContacts() {
