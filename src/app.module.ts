@@ -28,7 +28,7 @@ import { LetstalkModule } from './letstalk/letstalk.module';
     }),
     AuthModule,
     ContactModule,
-    // LetstalkModule
+    LetstalkModule
   ],
 })
 export class AppModule { }

@@ -10,7 +10,8 @@ export class CreateLetstalkDto {
    letstalk_fullname: string;
 
    @ApiProperty({ example: 'jane@example.com', description: 'Email address' })
-   @IsEmail()
+   // @IsEmail()
+   @IsString()
    @IsNotEmpty()
    @MaxLength(100)
    letstalk_email: string;
