@@ -22,12 +22,25 @@ export class ContactService {
       };
    }
 
-   async getAllContacts(): Promise<any> {
-      const contacts = await this.contactModel.find().sort({ createdAt: -1 }).lean();
+   async getAllContacts(page: number, limit: number): Promise<any> {
+      const skip = (page - 1) * limit;
+
+      const [items, total] = await Promise.all([
+         this.contactModel.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+         this.contactModel.countDocuments(),
+      ]);
+
       return {
+         message: 'success',
          statusCode: 200,
-         message: 'All contact records fetched successfully',
-         data: contacts,
+         data: items,
+         meta: {
+            total,
+            page,
+            limit,
+            totalPages: Math.ceil(total / limit),
+         },
       };
    }
+
 }

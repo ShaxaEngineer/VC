@@ -119,14 +119,17 @@ export class CandinateResponseSingleDto {
 
 
 export class PaginatedCandinatesDto {
-   @ApiProperty({ description: 'Total number of candidates in the database', example: 100 })
-   totalItems: number;
+   @ApiProperty({ example: 22, description: 'Total number of items' })
+   total: number;
 
-   @ApiProperty({ description: 'Total number of pages for pagination', example: 10 })
+   @ApiProperty({ example: 1, description: 'Current page number' })
+   page: number;
+
+   @ApiProperty({ example: 10, description: 'Number of items per page' })
+   limit: number;
+
+   @ApiProperty({ example: 3, description: 'Total number of pages' })
    totalPages: number;
-
-   @ApiProperty({ description: 'Current page of the paginated result', example: 1 })
-   currentPage: number;
 }
 
 export class GetAllCandinatesResponseDto {
