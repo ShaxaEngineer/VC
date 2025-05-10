@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CandinatesService } from './candinates.service';
 import { ImageService } from 'src/images/image.service';
@@ -109,5 +109,16 @@ export class CandinatesController {
          throw new BadRequestException('Failed to create candinate');
       }
    }
+
+
+   @Delete(':id')
+   @ApiOperation({ summary: 'Delete a candidate by ID' })
+   @ApiParam({ name: 'id', type: 'string', description: 'Candidate ID to delete' })
+   @ApiResponse({ status: 200, description: 'message:success, statusCode:200' })
+   @ApiResponse({ status: 404, description: 'Candidate not found' })
+   async deleteCandidate(@Param('id') id: string) {
+      return this.candinatesService.remove(id);
+   }
+
 
 }

@@ -4,12 +4,15 @@ import mongoose, { Model } from 'mongoose';
 import { Candinate, CandinateDocument } from '../models/candinates.schema';
 import { CreateCandinateDto } from './candinates.dto';
 import { Vacancy, VacancyDocument } from 'src/models/vacancies.schema';
+import { ImageService } from 'src/images/image.service';
 
 @Injectable()
 export class CandinatesService {
    constructor(
       @InjectModel(Candinate.name) private readonly candidateModel: Model<CandinateDocument>,
       @InjectModel(Vacancy.name) private readonly vacancyModel: Model<VacancyDocument>,
+      private readonly imageService: ImageService,
+
    ) { }
 
    async create(
@@ -116,9 +119,14 @@ export class CandinatesService {
          throw new NotFoundException(`Candidate with ID ${id} not found`);
       }
 
+      if (result.candinate_resume) {
+         await this.imageService.deleteImage(result.candinate_resume);
+      }
+
       return {
-         message: 'Candidate deleted successfully',
+         message: 'success',
          statusCode: 200,
       };
    }
+
 }
