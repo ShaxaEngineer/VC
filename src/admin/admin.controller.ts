@@ -9,6 +9,7 @@ import {
   Req,
   NotFoundException,
   Put,
+  Get,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import {
@@ -19,6 +20,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateAdminDtoSW } from 'src/swagger/admin.sw.dto';
+import { AdminGuard } from 'src/auth/admin.guard';
 
 @Controller('admin')
 @ApiTags('admin')
@@ -44,7 +46,17 @@ export class AdminController {
     return this.adminService.loginAdmin(body.username, body.password);
   }
 
+
+  @ApiOperation({ summary: 'Get all admins (with hashed passwords)' })
+  @UseGuards(AdminGuard)
+  @ApiResponse({ status: 200, description: 'List of all admins with hashed passwords' })
+  @Get("all")
+  async getAdmins() {
+    return { message: "success", statusCode: 200, data: await this.adminService.getAdmins() }
+  }
+
   @ApiOperation({ summary: 'Update admin by ID' })
+  @UseGuards(AdminGuard)
   @ApiBody({ type: CreateAdminDtoSW })
   @ApiResponse({ status: 200, description: 'Admin updated successfully' })
   @Put(':id')

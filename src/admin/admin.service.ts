@@ -52,6 +52,18 @@ export class AdminService {
       };
    }
 
+   async getAdmins(): Promise<{ username: string; password: string; id: string }[]> {
+      const admins = await this.adminModel.find();
+
+      return admins.map(admin => ({
+         id: (admin._id as string).toString(),
+         username: admin.username,
+         password: admin.password, // this is the hashed password
+      }));
+   }
+
+
+
    // Update Admin
    async updateAdmin(id: string, username?: string, password?: string) {
       const admin = await this.adminModel.findById(id);
