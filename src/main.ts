@@ -8,7 +8,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
-
+  app.enableCors()
   const config = new DocumentBuilder()
     .setTitle('Vacancies API')
     .setDescription('API for managing employers, vacancies, etc.')
