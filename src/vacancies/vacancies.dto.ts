@@ -7,7 +7,8 @@ export class CreateVacancyDto {
    @MaxLength(255, { message: 'text most 255 characters' })
    vacancy_name: string;
 
-   // @IsNotEmpty()
+   @IsString()
+   @IsNotEmpty()
    vacancy_image: string;
 
    @IsNotEmpty()

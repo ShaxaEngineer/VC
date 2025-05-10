@@ -2,11 +2,14 @@ import { Injectable, NotFoundException, BadRequestException, InternalServerError
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Vacancy, VacancyDocument } from '../models/vacancies.schema';
+import { ImageService } from 'src/images/image.service';
 
 @Injectable()
 export class VacanciesService {
    constructor(
       @InjectModel(Vacancy.name) private readonly vacancyModel: Model<VacancyDocument>,
+      private readonly imageService: ImageService,
+
    ) { }
 
    async create(createVacancyDto: any): Promise<any> {
@@ -62,6 +65,12 @@ export class VacanciesService {
          const vacancyDoc = await this.vacancyModel.findById(id).exec();
          if (!vacancyDoc) {
             throw new NotFoundException(`Vacancy with ID ${id} not found`);
+         }
+
+         const { vacancy_image } = updateVacancyDto;
+
+         if (vacancy_image && vacancy_image !== vacancyDoc.vacancy_image) {
+            await this.imageService.deleteImage(vacancyDoc.vacancy_image);
          }
 
          Object.assign(vacancyDoc, updateVacancyDto);
