@@ -11,7 +11,8 @@ export class CreateContactDto {
    contact_fullname: string;
 
    @ApiProperty({ example: 'john@example.com', description: 'Email address' })
-   @IsEmail()
+   // @IsEmail()
+   @IsString()
    @IsNotEmpty()
    @MaxLength(100)
    contact_email: string;
