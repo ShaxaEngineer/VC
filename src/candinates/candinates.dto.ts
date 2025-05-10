@@ -1,6 +1,6 @@
 // src/admin/dto/create-candidate.dto.ts
 
-import { IsString, IsNotEmpty, IsOptional, MaxLength, IsMongoId } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, MaxLength, IsMongoId, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateCandinateDto {
@@ -53,6 +53,13 @@ export class CreateCandinateDto {
    @IsNotEmpty()
    @MaxLength(1000)
    candinate_message: string;
+
+   @ApiProperty({ example: 'true or false', description: 'candinate is eligibl to work in UK', maxLength: 100 })
+   @IsBoolean()
+   @IsNotEmpty()
+   candinate_eligibl_uk: boolean;
+
+
 
    @IsString()
    @IsNotEmpty()

@@ -17,6 +17,9 @@ export class Candinate {
    candinate_email: string;
 
    @Prop({ required: true })
+   candinate_eligibl_uk: boolean;
+
+   @Prop({ required: true })
    candinate_position: string;
 
    @Prop()

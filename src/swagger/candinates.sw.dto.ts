@@ -2,7 +2,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, MaxLength, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, MaxLength, IsOptional, IsBoolean } from 'class-validator';
 import { Candinate } from 'src/models/candinates.schema';
 
 export class CreateCandinateDtoSW {
@@ -29,6 +29,11 @@ export class CreateCandinateDtoSW {
    @IsNotEmpty()
    @MaxLength(100)
    candinate_email: string;
+
+   @ApiProperty({ example: 'true or false', description: 'candinate is eligibl to work in UK', maxLength: 100 })
+   @IsBoolean()
+   @IsNotEmpty()
+   candinate_eligibl_uk: boolean;
 
    @ApiPropertyOptional({ type: 'string', format: 'binary', description: 'Resume file, file you have to sent URL of file which backend returend' })
    @IsOptional()
@@ -67,6 +72,10 @@ export class CandinateResponseDto {
    @MaxLength(100)
    candinate_postion: string;
 
+   @ApiProperty({ example: 'true or false', description: 'candinate is eligibl to work in UK', maxLength: 100 })
+   @IsBoolean()
+   @IsNotEmpty()
+   candinate_eligibl_uk: boolean;
 
    @ApiProperty({ example: 'alice@example.com', description: 'Email address of the candinate', maxLength: 100 })
    @IsString()
@@ -161,6 +170,12 @@ export class UpdateCandinateDtoSW {
    @IsString()
    @MaxLength(100)
    candinate_email?: string;
+
+
+   @ApiProperty({ example: 'true or false', description: 'candinate is eligibl to work in UK', maxLength: 100 })
+   @IsBoolean()
+   @IsNotEmpty()
+   candinate_eligibl_uk: boolean;
 
    @ApiPropertyOptional({ type: 'string', format: 'binary', description: 'Updated resume' })
    @IsOptional()
