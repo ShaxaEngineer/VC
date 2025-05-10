@@ -54,14 +54,15 @@ export class CandinatesService {
       ]);
 
       return {
+
          message: 'success',
          statusCode: 200,
-         data: {
-            items,
+         data: items,
+         meta: {
             totalItems,
             totalPages: Math.ceil(totalItems / limit),
             currentPage: page,
-         },
+         }
       };
    }
 
