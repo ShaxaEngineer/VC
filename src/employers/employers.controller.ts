@@ -97,7 +97,7 @@ export class EmployersController {
 
    @Delete(':id')
    @ApiOperation({ summary: 'Delete employer' })
-   @ApiResponse({ status: 200, description: 'message: "success", statusCode:204, data:{}' })
+   @ApiResponse({ status: 200, description: 'message: "success", statusCode:204, data:"Employer with ID 681f9a39458a3c545a17b85e deleted successfully."' })
    @ApiResponse({ status: 404, description: 'Employer not found' })
    @UseGuards(AdminGuard)
    async delete(@Param('id') id: string) {
