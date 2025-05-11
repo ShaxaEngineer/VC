@@ -61,9 +61,10 @@ export class CandinatesService {
          statusCode: 200,
          data: items,
          meta: {
-            totalItems,
+            total: totalItems,
+            page,
+            limit,
             totalPages: Math.ceil(totalItems / limit),
-            currentPage: page,
          }
       };
    }
