@@ -1,16 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Patch,
-  Delete,
-  Param,
-  UseGuards,
-  Req,
-  NotFoundException,
-  Put,
-  Get,
-} from '@nestjs/common';
+import { Controller, Post, Body, Patch, Delete, Param, UseGuards, Req, NotFoundException, Put, Get } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import {
   ApiBearerAuth,
@@ -30,6 +18,7 @@ export class AdminController {
 
   @ApiOperation({ summary: 'Create a new admin' })
   @ApiBody({ type: CreateAdminDtoSW })
+  @UseGuards(AdminGuard)
   @ApiResponse({ status: 201, description: `statusCode:201, access_token:token` })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @Post('create')
