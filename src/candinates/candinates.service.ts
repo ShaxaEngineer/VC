@@ -85,11 +85,12 @@ export class CandinatesService {
       return {
          message: 'success',
          statusCode: 200,
-         data: {
-            items,
-            totalItems,
+         data: items,
+         meta: {
+            total: totalItems,
+            page,
+            limit,
             totalPages: Math.ceil(totalItems / limit),
-            currentPage: page,
          },
       };
    }

@@ -44,7 +44,7 @@ export class PartnerService {
                total,
                page,
                limit,
-               pages: Math.ceil(total / limit),
+               totalPages: Math.ceil(total / limit),
             },
          };
       } catch (error) {
